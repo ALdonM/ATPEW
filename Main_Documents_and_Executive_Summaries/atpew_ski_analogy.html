@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analogie du Ski - Test ATPEW</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #4ecca3;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(78, 204, 163, 0.5);
+        }
+        .subtitle {
+            text-align: center;
+            color: #93b5c6;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .info-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .satellite-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid;
+        }
+        .satellite-info.e14 {
+            border-color: #ff6b6b;
+        }
+        .satellite-info.e11 {
+            border-color: #4ecdc4;
+        }
+        .satellite-info h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        .metric-label {
+            color: #93b5c6;
+        }
+        .metric-value {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .legend {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .legend h3 {
+            margin-top: 0;
+            color: #4ecca3;
+        }
+        .legend-item {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .legend-item::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #4ecca3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test ATPEW : L'Analogie du Ski</h1>
+        <div class="subtitle">E14 (Piste Noire) vs E11 (Piste Verte) - Réadaptation quantique face à la gravité</div>
+        
+        <canvas id="skiCanvas"></canvas>
+        
+        <div class="info-panel">
+            <div class="satellite-info e14">
+                <h2>🎿 Skieur E14 (Piste Noire)</h2>
+                <div class="metric">
+                    <span class="metric-label">Viscosité de la neige</span>
+                    <span class="metric-value" id="viscosity-e14">Variable</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Fréquence cardiaque (Maser)</span>
+                    <span class="metric-value" id="heart-e14" style="color: #ff6b6b;">--- Hz</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Énergie dépensée (Δ Compton)</span>
+                    <span class="metric-value" id="energy-e14" style="color: #ff9f43;">--- Hz</span>
+                </div>
+            </div>
+            
+            <div class="satellite-info e11">
+                <h2>🎿 Skieur E11 (Piste Verte)</h2>
+                <div class="metric">
+                    <span class="metric-label">Viscosité de la neige</span>
+                    <span class="metric-value" id="viscosity-e11">Constante</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Fréquence cardiaque (Maser)</span>
+                    <span class="metric-value" id="heart-e11" style="color: #4ecdc4;">--- Hz</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Énergie dépensée (Δ Compton)</span>
+                    <span class="metric-value" id="energy-e11" style="color: #95e1d3;">--- Hz</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <h3>🔬 Correspondances Physiques</h3>
+            <div class="legend-item"><strong>La Piste :</strong> L'Onde Mère (le tissu de l'espace-temps)</div>
+            <div class="legend-item"><strong>Viscosité de la neige :</strong> Vitesse de phase locale Člocal (ralentit près de la Terre)</div>
+            <div class="legend-item"><strong>Piste Noire (E14) :</strong> Orbite elliptique - Variation extrême d'altitude</div>
+            <div class="legend-item"><strong>Piste Verte (E11) :</strong> Orbite circulaire - Altitude constante</div>
+            <div class="legend-item"><strong>Fréquence cardiaque :</strong> Fréquence du Maser (signal observable ~1.4 GHz)</div>
+            <div class="legend-item"><strong>Énergie dépensée :</strong> Δ Compton (ajustement de la masse-énergie de l'atome)</div>
+            <div class="legend-item"><strong>Ne pas tomber :</strong> Maintenir la cohérence quantique (éviter la rupture au seuil εc = 10⁻³⁵)</div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('skiCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Configuration du canvas
+        canvas.width = 1400;
+        canvas.height = 600;
+        
+        let time = 0;
+        
+        // Données simulées basées sur le document
+        const NU_MASER_BASE = 1420405751; // Hz
+        const DELTA_NU_E14 = 0.0769; // Hz (variation mesurée)
+        const DELTA_NU_COMPTON_E14 = 1.23e13; // Hz (variation Compton)
+        
+        function drawMountain(startX, startY, endX, endY, color, isBlack) {
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            
+            if (isBlack) {
+                // Piste noire - très pentue avec ondulations
+                const segments = 20;
+                for (let i = 0; i <= segments; i++) {
+                    const x = startX + (endX - startX) * (i / segments);
+                    const baseY = startY + (endY - startY) * (i / segments);
+                    const wobble = Math.sin(i * 0.8) * 30;
+                    ctx.lineTo(x, baseY + wobble);
+                }
+            } else {
+                // Piste verte - presque plate
+                ctx.lineTo(endX, endY);
+            }
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 8;
+            ctx.stroke();
+            
+            // Texture de neige
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 12;
+            ctx.stroke();
+        }
+        
+        function drawSkier(x, y, color, label, angle = 0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            
+            // Corps du skieur (simplifié)
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(0, -25, 12, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Corps
+            ctx.fillRect(-8, -15, 16, 30);
+            
+            // Skis
+            ctx.fillStyle = '#333';
+            ctx.fillRect(-20, 10, 40, 4);
+            
+            // Label
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, 0, -45);
+            
+            ctx.restore();
+        }
+        
+        function drawHeartRate(x, y, rate, maxRate, color) {
+            const width = 200;
+            const height = 50;
+            
+            // Fond
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.fillRect(x, y, width, height);
+            
+            // Barre de fréquence cardiaque
+            const barWidth = (rate / maxRate) * width;
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, barWidth, height);
+            
+            // Texte
+            ctx.fillStyle = 'white';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(`❤️ ${rate.toFixed(4)} Hz`, x + 5, y + 30);
+        }
+        
+        function drawViscosity(x, y, viscosity, label) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillRect(x, y, 150, 80);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Viscosité Člocal', x + 75, y + 20);
+            
+            ctx.font = '12px Arial';
+            ctx.fillText(label, x + 75, y + 40);
+            
+            // Indicateur visuel
+            const dots = Math.floor(viscosity * 10);
+            for (let i = 0; i < dots; i++) {
+                ctx.fillStyle = `rgba(100, 200, 255, ${0.3 + viscosity * 0.7})`;
+                ctx.beginPath();
+                ctx.arc(x + 20 + i * 12, y + 60, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            time += 0.02;
+            const cycle = (Math.sin(time) + 1) / 2; // 0 à 1
+            
+            // PISTE NOIRE (E14) - à gauche
+            drawMountain(100, 150, 600, 500, '#ff6b6b', true);
+            
+            // Position du skieur E14 (monte et descend)
+            const e14_progress = cycle;
+            const e14_x = 100 + 500 * e14_progress;
+            const e14_y = 150 + 350 * e14_progress + Math.sin(e14_progress * 20) * 30;
+            const e14_angle = Math.sin(e14_progress * 20) * 0.3;
+            
+            // Viscosité variable pour E14
+            const viscosity_e14 = 0.3 + cycle * 0.7; // Augmente en descendant
+            
+            drawSkier(e14_x, e14_y, '#ff6b6b', 'E14', e14_angle);
+            drawViscosity(50, 50, viscosity_e14, `${(viscosity_e14 * 100).toFixed(0)}% max`);
+            
+            // Fréquence cardiaque E14 (varie légèrement)
+            const heart_e14 = NU_MASER_BASE + DELTA_NU_E14 * Math.sin(time * 2);
+            drawHeartRate(50, 150, heart_e14 - NU_MASER_BASE + 0.05, 0.1, '#ff6b6b');
+            
+            // PISTE VERTE (E11) - à droite
+            drawMountain(800, 300, 1300, 320, '#4ecdc4', false);
+            
+            // Position du skieur E11 (reste presque au même niveau)
+            const e11_x = 800 + 500 * cycle;
+            const e11_y = 305;
+            
+            // Viscosité constante pour E11
+            const viscosity_e11 = 0.5;
+            
+            drawSkier(e11_x, e11_y, '#4ecdc4', 'E11', 0);
+            drawViscosity(1150, 50, viscosity_e11, 'Constante');
+            
+            // Fréquence cardiaque E11 (stable)
+            const heart_e11 = NU_MASER_BASE + 0.001 * Math.sin(time * 0.5);
+            drawHeartRate(1150, 150, heart_e11 - NU_MASER_BASE + 0.05, 0.1, '#4ecdc4');
+            
+            // Mise à jour des valeurs dans le panneau
+            document.getElementById('viscosity-e14').textContent = `${(viscosity_e14 * 100).toFixed(1)}%`;
+            document.getElementById('heart-e14').textContent = `${(DELTA_NU_E14 * Math.sin(time * 2)).toFixed(4)} Hz`;
+            document.getElementById('energy-e14').textContent = `${(DELTA_NU_COMPTON_E14 * Math.abs(Math.sin(time * 2))).toExponential(2)} Hz`;
+            
+            document.getElementById('viscosity-e11').textContent = '50% (stable)';
+            document.getElementById('heart-e11').textContent = '±0.001 Hz';
+            document.getElementById('energy-e11').textContent = '~0 Hz';
+            
+            // Titre des pistes
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('PISTE NOIRE ⬛', 350, 30);
+            ctx.fillText('Orbite Elliptique', 350, 50);
+            
+            ctx.fillText('PISTE VERTE 🟩', 1050, 30);
+            ctx.fillText('Orbite Circulaire', 1050, 50);
+            
+            // Flèches de gravité
+            ctx.strokeStyle = 'rgba(255, 200, 0, 0.5)';
+            ctx.lineWidth = 3;
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                ctx.moveTo(350 + i * 30, 520);
+                ctx.lineTo(360 + i * 30, 550);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(360 + i * 30, 550);
+                ctx.lineTo(355 + i * 30, 540);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(360 + i * 30, 550);
+                ctx.lineTo(365 + i * 30, 540);
+                ctx.stroke();
+            }
+            
+            ctx.fillStyle = 'rgba(255, 200, 0, 0.8)';
+            ctx.font = '16px Arial';
+            ctx.fillText('Gravité (↓ Člocal)', 380, 580);
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>
