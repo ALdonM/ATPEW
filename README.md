@@ -6,6 +6,12 @@
 [![PDF - Executive Summary (FR)](https://img.shields.io/badge/PDF-Executive_Summary_(FR)-red)](https://github.com/ALdonM/ATPEW/blob/ALdonM-ATPEW-Mains-et-ES/ATPEW%20-%20ES%20-%20Pr%C3%A9sentation%20ATPEW.pdf)
 
 ---
+**📄 DOI Zenodo**
+
+- **Version spécifique (dernière)** : [10.5281/zenodo.18296240](https://doi.org/10.5281/zenodo.18296240)  
+- **Toutes versions** : [10.5281/zenodo.18296239](https://doi.org/10.5281/zenodo.18296239)
+
+---
 
 ## **📄 Documents Disponibles**
 ### **1. Version Complète (Anglais)**
