@@ -2,7 +2,7 @@
 *Unifying Space-Time, Gravity, and Quantum Mechanics through a Primordial Energy Wave*
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-blue.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![PDF - Full Paper (EN)](https://img.shields.io/badge/PDF-Full_Paper_(EN)-green)](https://github.com/ALdonM/ATPEW/blob/ALdonM-ATPEW-Mains-et-ES/ATPEW%20Unifying%20Space-Time%2C%20Gravity%2C%20and%20Quantum%20Mechanics%20through%20a%20Primordial%20Energy%20Wave%20V4%20.pdf)
+[![PDF - Full Paper (EN)](https://img.shields.io/badge/PDF-Full_Paper_(EN)-green)](https://github.com/ALdonM/ATPEW/blob/master/Main_Documents_and_Executive_Summaries/ATPEW%20Unifying%20Space-Time%2C%20Gravity%2C%20and%20Quantum%20Mechanics%20through%20a%20Primordial%20Energy%20Wave%20V4%20.pdf)
 [![PDF - Executive Summary (FR)](https://img.shields.io/badge/PDF-Executive_Summary_(FR)-red)](https://github.com/ALdonM/ATPEW/blob/ALdonM-ATPEW-Mains-et-ES/ATPEW%20-%20ES%20-%20Pr%C3%A9sentation%20ATPEW.pdf)
 
 ---
